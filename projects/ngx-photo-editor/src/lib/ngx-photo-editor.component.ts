@@ -1,24 +1,38 @@
-import {Component, EventEmitter, Input, Output, ViewChild, ViewEncapsulation} from '@angular/core';
-import Cropper from 'cropperjs';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+  ViewEncapsulation,
+  Renderer2,
+  OnInit,
+} from "@angular/core";
+import Cropper from "cropperjs";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import ViewMode = Cropper.ViewMode;
+import Swal from "sweetalert2";
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'ngx-photo-editor',
-  templateUrl: './ngx-photo-editor.component.html',
-  styleUrls: ['./ngx-photo-editor.component.css'],
-  encapsulation: ViewEncapsulation.None
+  selector: "ngx-photo-editor",
+  templateUrl: "./ngx-photo-editor.component.html",
+  styleUrls: ["./ngx-photo-editor.component.css"],
+  encapsulation: ViewEncapsulation.None,
 })
-export class NgxPhotoEditorComponent {
+export class NgxPhotoEditorComponent implements OnInit {
+  @ViewChild("ngxPhotoEditorContent", { static: false })
+  content: ElementRef;
 
-  @ViewChild('ngxPhotoEditorContent', {static: false}) content;
+  isOpen = false;
 
   public cropper: Cropper;
   public outputImage: string;
   prevZoom = 0;
+  showDiv = false;
 
-  @Input() modalTitle = 'Photo Editor';
+  @Input() modalTitle = "Photo Editor";
   @Input() aspectRatio = 1;
   @Input() autoCropArea = 1;
   @Input() autoCrop = true;
@@ -39,19 +53,20 @@ export class NgxPhotoEditorComponent {
   @Input() resizeToWidth: number;
   @Input() resizeToHeight: number;
   @Input() imageSmoothingEnabled = true;
-  @Input() imageSmoothingQuality: ImageSmoothingQuality = 'high';
+  @Input() imageSmoothingQuality: ImageSmoothingQuality = "high";
   url: string;
   lastUpdate = Date.now();
 
-  format = 'png';
+  format = "png";
   quality = 92;
 
   isFormatDefined = false;
 
   @Output() imageCropped = new EventEmitter<CroppedEvent>();
 
-  constructor(private modalService: NgbModal) {
-  }
+  constructor(private modalService: NgbModal, private renderer: Renderer2) {}
+
+  ngOnInit(): void {}
 
   @Input() set imageQuality(value: number) {
     if (value > 0 && value <= 100) {
@@ -60,7 +75,7 @@ export class NgxPhotoEditorComponent {
   }
 
   @Input() set imageFormat(type: imageFormat) {
-    if ((/^(gif|jpe?g|tiff|png|webp|bmp)$/i).test(type)) {
+    if (/^(gif|jpe?g|tiff|png|webp|bmp)$/i.test(type)) {
       this.format = type;
       this.isFormatDefined = true;
     }
@@ -77,10 +92,14 @@ export class NgxPhotoEditorComponent {
   }
 
   @Input() set imageBase64(base64: string) {
-    if (base64 && (/^data:image\/([a-zA-Z]*);base64,([^\"]*)$/).test(base64)) {
+    if (base64 && /^data:image\/([a-zA-Z]*);base64,([^\"]*)$/.test(base64)) {
       this.imageUrl = base64;
       if (!this.isFormatDefined) {
-        this.format = ((base64.split(',')[0]).split(';')[0]).split(':')[1].split('/')[1];
+        this.format = base64
+          .split(",")[0]
+          .split(";")[0]
+          .split(":")[1]
+          .split("/")[1];
       }
     }
   }
@@ -88,9 +107,9 @@ export class NgxPhotoEditorComponent {
   @Input() set imageChanedEvent(event: any) {
     if (event) {
       const file = event.target.files[0];
-      if (file && (/\.(gif|jpe?g|tiff|png|webp|bmp)$/i).test(file.name)) {
+      if (file && /\.(gif|jpe?g|tiff|png|webp|bmp)$/i.test(file.name)) {
         if (!this.isFormatDefined) {
-          this.format = event.target.files[0].type.split('/')[1];
+          this.format = event.target.files[0].type.split("/")[1];
         }
         const reader = new FileReader();
         reader.onload = (ev: any) => {
@@ -102,9 +121,9 @@ export class NgxPhotoEditorComponent {
   }
 
   @Input() set imageFile(file: File) {
-    if (file && (/\.(gif|jpe?g|tiff|png|webp|bmp)$/i).test(file.name)) {
+    if (file && /\.(gif|jpe?g|tiff|png|webp|bmp)$/i.test(file.name)) {
       if (!this.isFormatDefined) {
-        this.format = file.type.split('/')[1];
+        this.format = file.type.split("/")[1];
       }
       const reader = new FileReader();
       reader.onload = (ev: any) => {
@@ -114,12 +133,15 @@ export class NgxPhotoEditorComponent {
     }
   }
 
-  onImageLoad(image) {
-
-    image.addEventListener('ready', () => {
+  onImageLoad(image: HTMLImageElement) {
+    image.addEventListener("ready", () => {
       if (this.roundCropper) {
-        (document.getElementsByClassName('cropper-view-box')[0] as HTMLElement).style.borderRadius = '50%';
-        (document.getElementsByClassName('cropper-face')[0] as HTMLElement).style.borderRadius = '50%';
+        (document.getElementsByClassName(
+          "cropper-view-box"
+        )[0] as HTMLElement).style.borderRadius = "50%";
+        (document.getElementsByClassName(
+          "cropper-face"
+        )[0] as HTMLElement).style.borderRadius = "50%";
       }
     });
 
@@ -136,6 +158,8 @@ export class NgxPhotoEditorComponent {
       cropBoxMovable: this.cropBoxMovable,
       cropBoxResizable: this.cropBoxResizable,
     });
+    // console.log(this.cropper);
+    console.log(image);
   }
 
   rotateRight() {
@@ -147,11 +171,11 @@ export class NgxPhotoEditorComponent {
   }
 
   crop() {
-    this.cropper.setDragMode('crop');
+    this.cropper.setDragMode("crop");
   }
 
   move() {
-    this.cropper.setDragMode('move');
+    this.cropper.setDragMode("move");
   }
 
   zoom(event) {
@@ -186,37 +210,59 @@ export class NgxPhotoEditorComponent {
       cropedImage = this.cropper.getCroppedCanvas({
         width: this.resizeToWidth,
         imageSmoothingEnabled: this.imageSmoothingEnabled,
-        imageSmoothingQuality: this.imageSmoothingQuality
+        imageSmoothingQuality: this.imageSmoothingQuality,
       });
     } else if (this.resizeToHeight) {
       cropedImage = this.cropper.getCroppedCanvas({
         height: this.resizeToHeight,
         imageSmoothingEnabled: this.imageSmoothingEnabled,
-        imageSmoothingQuality: this.imageSmoothingQuality
+        imageSmoothingQuality: this.imageSmoothingQuality,
       });
     } else if (this.resizeToWidth) {
       cropedImage = this.cropper.getCroppedCanvas({
         width: this.resizeToWidth,
         imageSmoothingEnabled: this.imageSmoothingEnabled,
-        imageSmoothingQuality: this.imageSmoothingQuality
+        imageSmoothingQuality: this.imageSmoothingQuality,
       });
     } else {
       cropedImage = this.cropper.getCroppedCanvas({
         imageSmoothingEnabled: this.imageSmoothingEnabled,
-        imageSmoothingQuality: this.imageSmoothingQuality
+        imageSmoothingQuality: this.imageSmoothingQuality,
       });
     }
-    this.outputImage = cropedImage.toDataURL('image/' + this.format, this.quality);
-    cropedImage.toBlob(blob => {
-      this.imageCropped.emit({
-        base64: this.outputImage,
-        file: new File([blob], Date.now() + '.' + this.format, {type: 'image/' + this.format})
-      });
-    }, 'image/' + this.format, this.quality / 100);
+    this.outputImage = cropedImage.toDataURL(
+      "image/" + this.format,
+      this.quality
+    );
+    cropedImage.toBlob(
+      (blob) => {
+        this.imageCropped.emit({
+          base64: this.outputImage,
+          file: new File([blob], Date.now() + "." + this.format, {
+            type: "image/" + this.format,
+          }),
+        });
+      },
+      "image/" + this.format,
+      this.quality / 100
+    );
   }
 
   open() {
-    this.modalService.open(this.content, {size: this.modalSize, centered: this.modalCentered, backdrop: 'static'});
+    // this.renderer.setStyle(this.content.nativeElement, "visibility", "visible");
+    Swal.fire({
+      html: this.content.nativeElement,
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: "Mentés",
+      cancelButtonText: "Mégsem",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.export();
+        Swal.fire("Elmentve!", "", "success");
+      }
+    });
   }
 }
 
@@ -225,6 +271,6 @@ export interface CroppedEvent {
   file?: File;
 }
 
-export type imageFormat = 'gif' | 'jpeg' | 'tiff' | 'png' | 'webp' | 'bmp';
+export type imageFormat = "gif" | "jpeg" | "tiff" | "png" | "webp" | "bmp";
 
-export type size = 'sm' | 'lg' | 'xl' | string;
+export type size = "sm" | "lg" | "xl" | string;
