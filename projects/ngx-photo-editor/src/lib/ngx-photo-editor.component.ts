@@ -8,6 +8,10 @@ import {
   ViewEncapsulation,
   Renderer2,
   OnInit,
+  ViewContainerRef,
+  TemplateRef,
+  AfterViewInit,
+  ViewRef,
 } from "@angular/core";
 import Cropper from "cropperjs";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -21,9 +25,15 @@ import Swal from "sweetalert2";
   styleUrls: ["./ngx-photo-editor.component.css"],
   encapsulation: ViewEncapsulation.None,
 })
-export class NgxPhotoEditorComponent implements OnInit {
-  @ViewChild("ngxPhotoEditorContent", { static: false })
+export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
+  @ViewChild("editor", { static: false })
   content: ElementRef;
+
+  @ViewChild("vc", { read: ViewContainerRef, static: false })
+  vc: ViewContainerRef;
+  @ViewChild("tpl", { read: TemplateRef, static: false }) tpl: TemplateRef<any>;
+
+  childRefView: ViewRef;
 
   isOpen = false;
 
@@ -65,6 +75,17 @@ export class NgxPhotoEditorComponent implements OnInit {
   @Output() imageCropped = new EventEmitter<CroppedEvent>();
 
   constructor(private modalService: NgbModal, private renderer: Renderer2) {}
+  ngAfterViewInit(): void {
+    this.childRefView = this.tpl.createEmbeddedView(null);
+  }
+
+  insertChildView(): void {
+    this.vc.insert(this.childRefView);
+  }
+
+  removeChildView(): void {
+    this.vc.detach();
+  }
 
   ngOnInit(): void {}
 
@@ -158,6 +179,10 @@ export class NgxPhotoEditorComponent implements OnInit {
       cropBoxMovable: this.cropBoxMovable,
       cropBoxResizable: this.cropBoxResizable,
     });
+
+    this.removeChildView();
+    this.insertChildView();
+
     // console.log(this.cropper);
     console.log(image);
   }
@@ -250,6 +275,13 @@ export class NgxPhotoEditorComponent implements OnInit {
 
   open() {
     // this.renderer.setStyle(this.content.nativeElement, "visibility", "visible");
+    this.childRefView = this.tpl.createEmbeddedView(null);
+
+    this.removeChildView();
+    this.insertChildView();
+
+    console.log(this.content);
+
     Swal.fire({
       html: this.content.nativeElement,
       showCloseButton: true,

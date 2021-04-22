@@ -57,44 +57,50 @@
   </div>
 </ng-template> -->
 
-<div style="visibility: visible" #ngxPhotoEditorContent>
-  <div
-    [style.backgroundColor]="darkTheme ? '#36393F' : '#D8D8D8'"
-    class="modal-body"
-    style="padding-bottom: 0"
-  >
-    <h5
-      [style.color]="darkTheme ? 'white' : 'black'"
-      style="margin-bottom: 16px"
-    >
-      {{ modalTitle }}
-    </h5>
-    <div
-      [style.height]="canvasHeight + 'px'"
-      class="ngx-photo-editor-img-container"
-    >
-      <img
-        #image
-        (load)="onImageLoad(image)"
-        [src]="url"
-        crossorigin="anonymous"
-        id="ngx-photo-editor-image"
-      />
-    </div>
-  </div>
-  <div class="ngx-photo-editor-icons-container">
-    <i (click)="crop()" class="fas fa-crop-alt"></i>
-    <i (click)="move()" class="fas fa-arrows-alt"></i>
-    <i (click)="zoomIn()" class="fas fa-search-plus"></i>
-    <i (click)="zoomOut()" class="fas fa-search-minus"></i>
-    <i (click)="flipV()" class="fas fa-arrows-alt-v"></i>
-    <i (click)="flipH()" class="fas fa-arrows-alt-h"></i>
-    <i (click)="rotateLeft()" class="fas fa-undo-alt"></i>
-    <i (click)="rotateRight()" class="fas fa-redo-alt"></i>
-    <i (click)="reset()" class="fas fa-sync-alt"></i>
-  </div>
-  <div
-    [style.backgroundColor]="darkTheme ? '#36393F' : '#D8D8D8'"
-    class="ngx-photo-editor-custom-modal-footer"
-  ></div>
+<div #editor>
+  <ng-container #vc
+    ><ng-container>
+      <ng-template #tpl>
+        <div style="visibility: visible" #ngxPhotoEditorContent>
+          <div
+            [style.backgroundColor]="darkTheme ? '#36393F' : '#D8D8D8'"
+            class="modal-body"
+            style="padding-bottom: 0"
+          >
+            <h5
+              [style.color]="darkTheme ? 'white' : 'black'"
+              style="margin-bottom: 16px"
+            >
+              {{ modalTitle }}
+            </h5>
+            <div
+              [style.height]="canvasHeight + 'px'"
+              class="ngx-photo-editor-img-container"
+            >
+              <img
+                #image
+                (load)="onImageLoad(image)"
+                [src]="url"
+                crossorigin="anonymous"
+                id="ngx-photo-editor-image"
+              />
+            </div>
+          </div>
+          <div class="ngx-photo-editor-icons-container">
+            <i (click)="crop()" class="fas fa-crop-alt"></i>
+            <i (click)="move()" class="fas fa-arrows-alt"></i>
+            <i (click)="zoomIn()" class="fas fa-search-plus"></i>
+            <i (click)="zoomOut()" class="fas fa-search-minus"></i>
+            <i (click)="flipV()" class="fas fa-arrows-alt-v"></i>
+            <i (click)="flipH()" class="fas fa-arrows-alt-h"></i>
+            <i (click)="rotateLeft()" class="fas fa-undo-alt"></i>
+            <i (click)="rotateRight()" class="fas fa-redo-alt"></i>
+            <i (click)="reset()" class="fas fa-sync-alt"></i>
+          </div>
+          <div
+            [style.backgroundColor]="darkTheme ? '#36393F' : '#D8D8D8'"
+            class="ngx-photo-editor-custom-modal-footer"
+          ></div>
+        </div> </ng-template></ng-container
+  ></ng-container>
 </div>
