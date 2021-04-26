@@ -1,5 +1,8 @@
-@import url('https://use.fontawesome.com/releases/v5.8.2/css/all.css');
-@import url('https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css');
+@import url("https://use.fontawesome.com/releases/v5.8.2/css/all.css");
+
+.swal2-styled.swal2-cancel {
+  background-color: #e2e2e2 !important;
+}
 
 .ngx-photo-editor-ngx-photo-editor-img-container {
   width: 100%;
@@ -18,7 +21,7 @@
 }
 
 .ngx-photo-editor-icons-container {
-  background-color: #8F8F8F;
+  background-color: #8f8f8f;
   color: white;
   padding: 15px;
   text-align: center;
@@ -54,7 +57,6 @@
   float: right;
   margin-left: 10px;
 }
-
 
 /*!
  * Cropper.js v1.5.7
@@ -164,7 +166,7 @@
 .cropper-center::before,
 .cropper-center::after {
   background-color: #eee;
-  content: ' ';
+  content: " ";
   display: block;
   position: absolute;
 }
@@ -318,7 +320,7 @@
 .cropper-point.point-se::before {
   background-color: #39f;
   bottom: -50%;
-  content: ' ';
+  content: " ";
   display: block;
   height: 200%;
   opacity: 0;
@@ -332,7 +334,7 @@
 }
 
 .cropper-bg {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC");
 }
 
 .cropper-hide {
@@ -360,5 +362,3 @@
 .cropper-disabled .cropper-point {
   cursor: not-allowed;
 }
-
-

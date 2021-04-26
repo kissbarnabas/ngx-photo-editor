@@ -1,12 +1,9 @@
-import {NgModule} from '@angular/core';
-import {NgxPhotoEditorComponent} from './ngx-photo-editor.component';
-import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
-
+import { NgModule } from "@angular/core";
+import { NgxPhotoEditorComponent } from "./ngx-photo-editor.component";
 
 @NgModule({
   declarations: [NgxPhotoEditorComponent],
-  imports: [NgbModalModule],
+  imports: [],
   exports: [NgxPhotoEditorComponent],
 })
-export class NgxPhotoEditorModule {
-}
+export class NgxPhotoEditorModule {}

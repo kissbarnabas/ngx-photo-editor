@@ -14,7 +14,6 @@ import {
   ViewRef,
 } from "@angular/core";
 import Cropper from "cropperjs";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import ViewMode = Cropper.ViewMode;
 import Swal from "sweetalert2";
 
@@ -74,7 +73,7 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
 
   @Output() imageCropped = new EventEmitter<CroppedEvent>();
 
-  constructor(private modalService: NgbModal, private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2) {}
   ngAfterViewInit(): void {
     this.childRefView = this.tpl.createEmbeddedView(null);
   }
