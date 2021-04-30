@@ -9,6 +9,14 @@
   float: left;
 }
 
+.swal2-styled.swal2-confirm {
+  background-color: #4200ff;
+}
+
+.fas {
+  color: #4200ff;
+}
+
 #ngx-photo-editor-image {
   display: block;
   max-width: 100%;

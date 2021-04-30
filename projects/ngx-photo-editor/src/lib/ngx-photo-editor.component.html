@@ -64,11 +64,13 @@
         <div style="visibility: visible" #ngxPhotoEditorContent>
           <div
             [style.backgroundColor]="darkTheme ? '#E2E2E2' : '#E2E2E2'"
+            [style.width]="canvasWidth + 'px'"
             class="modal-body"
             style="padding-bottom: 0"
           >
             <div
               [style.height]="canvasHeight + 'px'"
+              [style.width]="canvasWidth + 'px'"
               class="ngx-photo-editor-img-container"
             >
               <img
@@ -81,7 +83,7 @@
             </div>
           </div>
           <div
-            style="background-color: #4200ff"
+            style="background-color: white; width: 100%"
             class="ngx-photo-editor-icons-container"
           >
             <i (click)="crop()" class="fas fa-crop-alt"></i>

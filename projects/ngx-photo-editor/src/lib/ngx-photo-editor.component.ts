@@ -57,7 +57,8 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
   @Input() cropBoxResizable = true;
   @Input() darkTheme = true;
   @Input() roundCropper = false;
-  @Input() canvasHeight = 400;
+  @Input() canvasHeight = 100;
+  @Input() canvasWidth = 100;
 
   @Input() resizeToWidth: number;
   @Input() resizeToHeight: number;
@@ -312,10 +313,12 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
     console.log(this.content);
 
     Swal.fire({
+      width: this.canvasWidth + 100,
       html: this.content.nativeElement,
       showCloseButton: true,
       showCancelButton: true,
       focusConfirm: false,
+      confirmButtonColor: "#4200ff",
       confirmButtonText: "Mentés",
       cancelButtonText: "Mégsem",
     }).then((result) => {
