@@ -63,11 +63,14 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
   @Input() resizeToHeight: number;
   @Input() imageSmoothingEnabled = true;
   @Input() imageSmoothingQuality: ImageSmoothingQuality = "high";
+  @Input() fillColor = "rgba(255, 255, 255, 0)";
+  @Input() textureWidth = 1000;
+  @Input() textureHeight = 1000;
   url: string;
   lastUpdate = Date.now();
 
   format = "png";
-  quality = 92;
+  quality = 100;
 
   isFormatDefined = false;
 
@@ -245,6 +248,7 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
     } else if (this.resizeToWidth) {
       cropedImage = this.cropper.getCroppedCanvas({
         width: this.resizeToWidth,
+        fillColor: this.fillColor,
         imageSmoothingEnabled: this.imageSmoothingEnabled,
         imageSmoothingQuality: this.imageSmoothingQuality,
       });
@@ -254,10 +258,36 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
         imageSmoothingQuality: this.imageSmoothingQuality,
       });
     }
-    this.outputImage = cropedImage.toDataURL(
+
+    var myImage = new Image(
+      (cropedImage as HTMLCanvasElement).width,
+      (cropedImage as HTMLCanvasElement).height
+    );
+
+    myImage.src = (cropedImage as HTMLCanvasElement).toDataURL(
       "image/" + this.format,
       this.quality
     );
+
+    this.cropper.setAspectRatio(1);
+
+    let canvas = document.createElement("canvas");
+
+    canvas.width = this.textureWidth;
+    canvas.height = this.textureHeight;
+
+    let context = (canvas as HTMLCanvasElement).getContext("2d");
+    context.fillStyle = this.fillColor;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    context.drawImage(
+      cropedImage,
+      canvas.width / 2 - cropedImage.width / 2,
+      canvas.height / 2 - cropedImage.height / 2
+    );
+
+    this.outputImage = canvas.toDataURL("image/" + this.format, this.quality);
+
     cropedImage.toBlob(
       (blob) => {
         this.imageCropped.emit({

@@ -1,10 +1,10 @@
 {
   "name": "@hunelco/photo-editor",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "An image cropper for Angular",
   "author": {
-    "name": "Ivanics József",
-    "email": "jozsef.ivanics@hunelco.com"
+    "name": "Barnabás Kiss",
+    "email": "barnabas.kiss@hunelco.com"
   },
   "license": "MIT",
   "peerDependencies": {
