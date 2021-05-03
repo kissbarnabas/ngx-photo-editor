@@ -69,6 +69,7 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
   @Input() textureHeight = 1000;
   url: string;
   lastUpdate = Date.now();
+  private croppedImg: string;
 
   format = "png";
   quality = 100;
@@ -88,6 +89,10 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
 
   removeChildView(): void {
     this.vc.detach();
+  }
+
+  getCroppedImage(): string {
+    return this.croppedImg;
   }
 
   ngOnInit(): void {}
@@ -249,7 +254,7 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
     } else if (this.resizeToWidth) {
       cropedImage = this.cropper.getCroppedCanvas({
         width: this.resizeToWidth,
-        fillColor: this.fillColor,
+        fillColor: "rgba(255, 255, 255, 0)",
         imageSmoothingEnabled: this.imageSmoothingEnabled,
         imageSmoothingQuality: this.imageSmoothingQuality,
       });
@@ -269,6 +274,8 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
       "image/" + this.format,
       this.quality
     );
+
+    this.croppedImg = myImage.src;
 
     this.cropper.setAspectRatio(1);
 
