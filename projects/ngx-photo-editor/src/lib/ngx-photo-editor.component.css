@@ -38,13 +38,13 @@
 }
 
 .ngx-photo-editor-icons-container > i {
-  padding-right: 15px;
+  padding: 15px;
   transition: color 0.5s;
   cursor: pointer;
 }
 
 .ngx-photo-editor-icons-container > i:nth-child(even) {
-  padding-right: 30px;
+  padding: 30px;
 }
 
 .ngx-photo-editor-icons-container > i:last-child {
