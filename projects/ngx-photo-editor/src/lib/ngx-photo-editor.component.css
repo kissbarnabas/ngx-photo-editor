@@ -31,20 +31,19 @@
 .ngx-photo-editor-icons-container {
   background-color: #8f8f8f;
   color: white;
-  padding: 15px;
   text-align: center;
   outline: none;
   border: none;
 }
 
 .ngx-photo-editor-icons-container > i {
-  padding: 15px;
+  padding: 10px;
   transition: color 0.5s;
   cursor: pointer;
 }
 
 .ngx-photo-editor-icons-container > i:nth-child(even) {
-  padding: 30px;
+  padding: 10px;
 }
 
 .ngx-photo-editor-icons-container > i:last-child {
