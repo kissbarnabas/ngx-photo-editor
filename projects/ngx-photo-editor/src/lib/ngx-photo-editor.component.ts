@@ -70,6 +70,7 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
   url: string;
   lastUpdate = Date.now();
   private croppedImg: string;
+  private originalImg: string;
 
   format = "png";
   quality = 100;
@@ -165,12 +166,12 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
   onImageLoad(image: HTMLImageElement) {
     image.addEventListener("ready", () => {
       if (this.roundCropper) {
-        (document.getElementsByClassName(
-          "cropper-view-box"
-        )[0] as HTMLElement).style.borderRadius = "50%";
-        (document.getElementsByClassName(
-          "cropper-face"
-        )[0] as HTMLElement).style.borderRadius = "50%";
+        (
+          document.getElementsByClassName("cropper-view-box")[0] as HTMLElement
+        ).style.borderRadius = "50%";
+        (
+          document.getElementsByClassName("cropper-face")[0] as HTMLElement
+        ).style.borderRadius = "50%";
       }
     });
 
@@ -265,6 +266,11 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
       });
     }
 
+    this.originalImg = (cropedImage as HTMLCanvasElement).toDataURL(
+      "image/" + this.format,
+      this.quality
+    );
+
     var myImage = new Image(
       (cropedImage as HTMLCanvasElement).width,
       (cropedImage as HTMLCanvasElement).height
@@ -298,12 +304,18 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
 
     cropedImage.toBlob(
       (blob) => {
-        this.imageCropped.emit({
-          base64: this.outputImage,
-          file: new File([blob], Date.now() + "." + this.format, {
-            type: "image/" + this.format,
-          }),
-        });
+        try {
+          this.imageCropped.emit({
+            textureImage: this.outputImage,
+            croppedImage: this.croppedImg,
+            originalImage: this.originalImg,
+            file: new File([blob], Date.now() + "." + this.format, {
+              type: "image/" + this.format,
+            }),
+          });
+        } catch (error) {
+          console.log(error);
+        }
       },
       "image/" + this.format,
       this.quality / 100
@@ -338,7 +350,9 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
 }
 
 export interface CroppedEvent {
-  base64?: string;
+  textureImage?: string;
+  originalImage?: string;
+  croppedImage?: string;
   file?: File;
 }
 
