@@ -145,6 +145,7 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
         reader.onload = (ev: any) => {
           this.imageUrl = ev.target.result;
         };
+
         reader.readAsDataURL(event.target.files[0]);
       }
     }
@@ -266,10 +267,7 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
       });
     }
 
-    this.originalImg = (cropedImage as HTMLCanvasElement).toDataURL(
-      "image/" + this.format,
-      this.quality
-    );
+    this.originalImg = this.imageUrl;
 
     var myImage = new Image(
       (cropedImage as HTMLCanvasElement).width,
@@ -302,13 +300,17 @@ export class NgxPhotoEditorComponent implements OnInit, AfterViewInit {
 
     this.outputImage = canvas.toDataURL("image/" + this.format, this.quality);
 
+    // console.log("output", this.outputImage);
+    // console.log("croppedImg", this.croppedImg);
+    console.log(this.originalImg);
+
     cropedImage.toBlob(
       (blob) => {
         try {
           this.imageCropped.emit({
             textureImage: this.outputImage,
             croppedImage: this.croppedImg,
-            originalImage: this.originalImg,
+            originalImage: this.url,
             file: new File([blob], Date.now() + "." + this.format, {
               type: "image/" + this.format,
             }),
